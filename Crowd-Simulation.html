@@ -5,37 +5,94 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Crowd Simulation</title>
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+    }
 
+    #simulation-container {
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+      padding-top: 6rem;
+      overflow: hidden;
+    }
+
+    .sim-text {
+      flex: 1.5;
+      padding: 2rem;
+      max-width: 800px;
+      color: white;
+      background-color: black;
+      user-select: none;
+      -webkit-user-select: none;
+      z-index: 1;
+    }
+
+    #sim-wrapper {
+      flex: 2;
+      position: relative;
+      height: 100%;
+    }
+
+    #simCanvas {
+      position: absolute;
+      top: 0;
+      left: 5;
+      width: 80%;
+      height: 100%;
+      z-index: 0;
+      display: block;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: #111;
+      color: white;
+    }
+
+    <!-- Main body text -->  
+  </style>
 </head>
 <body>
-<div id="header-placeholder"></div>
-<script>
-  fetch('header.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('header-placeholder').innerHTML = data;
-    });
-</script>
 
-<section id="simulation" style="position: relative; width: 100%; height: 100vh; overflow: hidden; padding-top: 6rem;">
-  <canvas id="simCanvas" style="position: absolute; top: 3rem; left: 0; width: 100%; height: 100%; z-index: 0;"></canvas>
-  <div class="sim-text" style="position: relative; z-index: 1; color: white; padding: 2rem; max-width: 800px; margin: 0 auto; font-family: sans-serif;">
-    <h2>Background</h2>
-    <p>
-      Microscopic crowd simulations are often used in urban design to estimate how many pedestrians can move through a given space, in a given time. However, the models that 
-    </p>
-    <p>
-      Software, such as <a href="https://www.vadere.org/">Vadere</a> allows users to access, open source models of crowd simulation and tailor it to their specific situation. Higher end systems, like  <a href="https://www.oasys-software.com/products/massmotion/">MassMotion by Oasis</a>. 
-    </p>
-  </div>
-</section>
-    <footer>
+  <div id="header-placeholder"></div>
+  <script>
+    fetch('header.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('header-placeholder').innerHTML = data;
+      });
+  </script>
+
+  <section id="simulation-container">
+    <!-- Left-side text content -->
+    <div class="sim-text">
+      <h2>Background</h2>
+      <p>
+        Microscopic crowd simulations are often used in urban design to estimate how many pedestrians can move through a given space, in a given time. However, the models that 
+      </p>
+      <p>
+        Software, such as <a href="https://www.vadere.org/">Vadere</a> allows users to access, open source models of crowd simulation and tailor it to their specific situation. Higher end systems, like  <a href="https://www.oasys-software.com/products/massmotion/">MassMotion by Oasis</a>. 
+      </p>
+    </div>
+
+    <!-- Right-side simulation canvas -->
+    <div id="sim-wrapper">
+      <canvas id="simCanvas"></canvas>
+    </div>
+  </section>
+
+  <footer>
     <p>© 2025 Joe Ventress</p>
   </footer>
-</html>
-  
-  <!-- Script section can stay anywhere before </body> -->
+
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script src="js/simulation.js"></script>
 
+</body>
+</html>

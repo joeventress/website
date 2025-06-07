@@ -3,8 +3,8 @@ const scene = new THREE.Scene();
 
 // Camera setup
 const aspect = window.innerWidth / window.innerHeight;
-const camera = new THREE.OrthographicCamera(-50 * aspect, 50 * aspect, 50, -50, 0.1, 1000);
-camera.position.set(15, 10, 25);
+const camera = new THREE.OrthographicCamera(-200 * aspect, 200 * aspect, 200, -200, 0.5, 1000);
+camera.position.set(100, 10, 100);
 camera.lookAt(0, 0, 0);
 
 // Renderer
@@ -16,8 +16,10 @@ const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableRotate = true;
 controls.enablePan = true;
 controls.enableZoom = true;
-controls.minZoom = 1;
+controls.minZoom = 0.5;
 controls.maxZoom = 5;
+
+
 
 // Data storage
 const roadTiles = [];
@@ -148,9 +150,45 @@ function createCityLayout() {
     const midX = b.x;
     for (let z = minZ + buildingSize / 2; z < maxZ - buildingSize / 2; z += roadWidth) {
       createRoadTile(midX, z, roadWidth, roadWidth);
+     } 
+
     }
-  }
-}
+    // Compute center and bounding size of city
+    let sumX = 0, sumZ = 0;
+    let minX = Infinity, maxX = -Infinity;
+    let minZ = Infinity, maxZ = -Infinity;
+
+    for (const coord of buildingCoords) {
+        sumX += coord.x;
+        sumZ += coord.z;
+        if (coord.x < minX) minX = coord.x;
+        if (coord.x > maxX) maxX = coord.x;
+        if (coord.z < minZ) minZ = coord.z;
+        if (coord.z > maxZ) maxZ = coord.z;
+    }
+
+    const centerX = sumX / buildingCoords.length;
+    const centerZ = sumZ / buildingCoords.length;
+    const padding = 20;
+
+    const width = (maxX - minX) + padding;
+    const height = (maxZ - minZ) + padding;
+    const aspect = window.innerWidth / window.innerHeight;
+
+    const orthoWidth = Math.max(width, height * aspect) / 2;
+    const orthoHeight = orthoWidth / aspect;
+
+    camera.left = -orthoWidth;
+    camera.right = orthoWidth;
+    camera.top = orthoHeight;
+    camera.bottom = -orthoHeight;
+    camera.updateProjectionMatrix();
+
+    camera.position.set(centerX + 120, 100, centerZ + 120); // directly above at an angle
+    camera.lookAt(centerX, 0, centerZ);
+    controls.target.set(centerX, 0, centerZ);
+  } 
+
 
 createCityLayout();
 
@@ -251,13 +289,3 @@ function animate() {
 
 animate();
 
-// Handle window resizing
-window.addEventListener('resize', () => {
-  const aspect = window.innerWidth / window.innerHeight;
-  camera.left = -50 * aspect;
-  camera.right = 50 * aspect;
-  camera.top = 50;
-  camera.bottom = -50;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
