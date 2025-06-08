@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Me</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <script>
+    fetch('header.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('header-placeholder').innerHTML = data;
+      });
+  </script>
+
+<div class="page-content">
+  <div class="about-container">
+    <div class="about-text">
+      <h1>Contact Details</h1>
+
+      <a href="https://linkedin.com/in/joseph-ventress-24a0292b6" target="_blank" class="social-link">
+        <img src="LinkedIn.png" alt="LinkedIn Logo">
+        LinkedIn
+      </a>
+
+      <a href="https://bsky.app/profile/joeventress.bsky.social" target="_blank" class="social-link">
+        <img src="Bluesky_Logo.png" alt="BlueSky Logo">
+        BlueSky
+      </a>
+
+      <h2>Send me an e-mail!</h2>
+
+      <form id="emailForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Your Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+  </div>
+</div>
+  <script>
+    document.getElementById("emailForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const message = document.getElementById("message").value;
+
+      const subject = encodeURIComponent("Website Contact form from " + name);
+      const body = encodeURIComponent("From: " + name + " (" + email + ")\n\n" + message);
+
+      window.location.href = `mailto:joe.ventress@northumbria.ac.uk?subject=${subject}&body=${body}`;
+    });
+  </script>
+</body>
+</html>

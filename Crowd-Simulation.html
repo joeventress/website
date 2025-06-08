@@ -1,59 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Crowd Simulation</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-    }
-
-    #simulation-container {
-      display: flex;
-      flex-direction: row;
-      height: 100vh;
-      padding-top: 2rem;
-      overflow: hidden;
-    }
-
-    .sim-text {
-      flex: 1.5;
-      padding: 2rem;
-      max-width: 800px;
-      color: white;
-      background-color: black;
-      user-select: none;
-      -webkit-user-select: none;
-      z-index: 1;
-    }
-
-    #sim-wrapper {
-      flex: 2;
-      position: relative;
-      height: 100%;
-    }
-
-    #simCanvas {
-      position: absolute;
-      top: 0;
-      left: 5;
-      width: 80%;
-      height: 100%;
-      z-index: 0;
-      display: block;
-    }
-
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background: #111;
-      color: white;
-    }
-
-  </style>
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
 
@@ -74,13 +25,20 @@
         Microscopic crowd simulations are often used in urban design to estimate how many pedestrians can move through a given space, in a given time. However, the models that 
       </p>
       <p>
-        Software, such as <a href="https://www.vadere.org/">Vadere</a> allows users to access, open source models of crowd simulation and tailor it to their specific situation. Higher end systems, like  <a href="https://www.oasys-software.com/products/massmotion/">MassMotion by Oasis</a>. 
+        Software such as <a href="https://www.vadere.org/" class="sim-link">Vadere</a> allows users to access open-source models of crowd simulation and tailor them to their specific situation. Higher-end systems like <a href="https://www.oasys-software.com/products/massmotion/" class="sim-link">MassMotion by Oasis</a> offer advanced features.
       </p>
     </div>
 
     <!-- Right-side simulation canvas -->
     <div id="sim-wrapper">
       <canvas id="simCanvas"></canvas>
+    </div>
+
+    <div class="sim-instructions">
+      Use your mouse to play with the scene above:
+      Left click: <span class="highlight">rotate</span>,
+      Right click: <span class="highlight">pan</span>,
+      Scroll wheel: <span class="highlight">zoom</span>.
     </div>
   </section>
 
