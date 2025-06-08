@@ -7,15 +7,29 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
+  <div id="header-placeholder"></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('/header.html')
+        .then(response => response.text())
+        .then(html => {
+          // 1) Inject the header markup
+          document.getElementById('header-placeholder').innerHTML = html;
 
-<div id="header-placeholder"></div>
-<script>
-  fetch('header.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('header-placeholder').innerHTML = data;
+          // 2) Wire up the menu button
+          const toggleButton = document.getElementById('menuToggle');
+          const navMenu      = document.getElementById('navMenu');
+          if (toggleButton && navMenu) {
+            toggleButton.addEventListener('click', () => {
+              toggleButton.classList.toggle('open');
+              navMenu.classList.toggle('show');
+            });
+          }
+        })
+        .catch(err => console.error('Error loading header:', err));
     });
-</script>
+  </script>
+
 
 <div class="page-content">
   <div class="about-container">

@@ -11,12 +11,19 @@ body {
 
 /* ========== Header & Footer ========== */
 header, footer {
-  position: relative;
+  background: linear-gradient(45deg, #3b3b3b, #5a5a5a );
+  position: sticky;
+  top: 0;
+  transition: padding 0.3s, background-color 0.3s;
   z-index: 10;
   background-color: black;
   color: white;
   padding: 1rem;
-  text-align: center;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
 }
 
 footer {
@@ -57,8 +64,8 @@ nav a {
 .overlay {
   position: relative;
   z-index: 1;
-  text-align: center;
-  padding: 2rem;
+  text-align: left;
+  padding: 5rem;
   background: rgba(0, 0, 0, 0.4);
   border-radius: 8px;
 }
@@ -288,7 +295,7 @@ input[type="submit"] {
 
   .site-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: left;
   }
 
   .page-content {
@@ -352,3 +359,55 @@ input[type="submit"] {
     background: url('images/fallback.jpg') center center / cover no-repeat;
   }
 }
+
+#navMenu {
+  display: none;
+  flex-direction: column;
+  background: #333;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 10%;
+  padding: 1rem 2rem;
+  box-sizing: border-box;
+}
+
+ .menu-button {
+  width: 30px;
+  height: 22px;
+  position: relative;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.menu-button span {
+  background: white;
+  height: 3px;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  transition: all 0.3s ease-in-out;
+}
+.menu-button span:nth-child(1) { top: 0; }
+.menu-button span:nth-child(2) { top: 9px; }
+.menu-button span:nth-child(3) { top: 18px; }
+
+/* animate into an “X” */
+.menu-button.open span:nth-child(1) {
+  transform: rotate(45deg);
+  top: 9px;
+}
+.menu-button.open span:nth-child(2) {
+  opacity: 0;
+}
+.menu-button.open span:nth-child(3) {
+  transform: rotate(-45deg);
+  top: 9px;
+}
+
+#navMenu.show {
+  display: flex;
+}
+
