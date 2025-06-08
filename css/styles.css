@@ -18,7 +18,7 @@ header, footer {
   z-index: 10;
   background-color: black;
   color: white;
-  padding: 1rem;
+  padding: 2rem;
   text-align: left;
   display: flex;
   align-items: center;
@@ -366,8 +366,9 @@ input[type="submit"] {
   background: #333;
   position: absolute;
   top: 100%;
-  right: 0;
-  width: 10%;
+  right: 0;            /* anchor it at the right edge */
+  width: 200px;        /* a fixed-ish width for desktops */
+  max-width: 90vw;     /* but never wider than 90% of the viewport */
   padding: 1rem 2rem;
   box-sizing: border-box;
 }
