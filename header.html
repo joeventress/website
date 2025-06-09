@@ -1,32 +1,67 @@
 <header class="site-header">
-  <div class="Left">Joe Ventress</div>
+  <div class="Left">
+    <a href="index.html" style="color: inherit; text-decoration: none;">Joe Ventress</a>
+  </div>
 
   <button id="menuToggle" class="menu-button" class="Right" aria-label="Toggle menu">
     <span></span>
     <span></span>
     <span></span>
   </button>
-
-  <nav id="navMenu" class = "center">
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="Crowd-Simulation.html">Crowd Simulation</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li><a href="mocap.html"> Motion Capture</a></li>
-      <li><a href="cv.pdf"> CV </a></li>
-    </ul>
-  </nav>
 </header>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const toggleButton = document.getElementById('menuToggle');
-    const navMenu = document.getElementById('navMenu');
+<nav id="navMenu" class = "center">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="cv.pdf"> CV </a></li>
+    <li><a href="Crowd-Simulation.html">Crowd Simulation</a></li>
+    <li><a href="mocap.html"> Motion Capture</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
 
-    toggleButton.addEventListener('click', () => {
-      toggleButton.classList.toggle('open');
-      navMenu.classList.toggle('show');
-    });
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const toggleButton = document.getElementById('menuToggle');
+  const navMenu       = document.getElementById('navMenu');
+
+  // Show the menu with a CSS transition
+  function showMenu() {
+    // 1) Make it visible immediately
+    navMenu.style.visibility = 'visible';
+    // 2) Remove any lingering “hiding” state
+    navMenu.classList.remove('hiding');
+    // 3) Force a reflow so the browser registers the “hidden” styles
+    //    before we flip to “show”
+    navMenu.getBoundingClientRect();
+    // 4) Add the “show” class to start the transition
+    navMenu.classList.add('show');
+  }
+
+  // Hide the menu with a CSS transition
+  function hideMenu() {
+    // 1) Add the “hiding” class, which transitions it back up/fade out
+    navMenu.classList.add('hiding');
+    // 2) When the opacity transition ends, clean up
+    navMenu.addEventListener('transitionend', function handler(e) {
+      if (e.propertyName === 'opacity') {
+        // Remove both classes and hide it from layout
+        navMenu.classList.remove('show', 'hiding');
+        navMenu.style.visibility = 'hidden';
+        navMenu.removeEventListener('transitionend', handler);
+      }
+    }, { once: true });
+  }
+
+  toggleButton.addEventListener('click', () => {
+    const isOpen = navMenu.classList.contains('show');
+    if (isOpen) {
+      hideMenu();
+    } else {
+      showMenu();
+    }
+    toggleButton.classList.toggle('open');
   });
+});
 </script>

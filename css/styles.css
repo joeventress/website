@@ -16,13 +16,13 @@ header, footer {
   top: 0;
   transition: padding 0.3s, background-color 0.3s;
   z-index: 10;
-  background-color: black;
   color: white;
   padding: 2rem;
   text-align: left;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  z-index: 20;
 
 }
 
@@ -65,7 +65,7 @@ nav a {
   position: relative;
   z-index: 1;
   text-align: left;
-  padding: 5rem;
+  padding: 10rem;
   background: rgba(0, 0, 0, 0.4);
   border-radius: 8px;
 }
@@ -296,6 +296,7 @@ input[type="submit"] {
   .site-header {
     flex-direction: column;
     align-items: left;
+    z-index: 20;
   }
 
   .page-content {
@@ -361,16 +362,30 @@ input[type="submit"] {
 }
 
 #navMenu {
-  display: none;
-  flex-direction: column;
-  background: #333;
   position: absolute;
-  top: 100%;
-  right: 0;            /* anchor it at the right edge */
-  width: 200px;        /* a fixed-ish width for desktops */
-  max-width: 90vw;     /* but never wider than 90% of the viewport */
-  padding: 1rem 2rem;
-  box-sizing: border-box;
+  top: 3.5rem; right: 1rem;
+  background: linear-gradient(10deg, #3b3b3b, #5a5a5a);
+  border: 2px solid black;
+  border-radius: 1.5rem;
+  padding: 2rem 1rem 0.4rem;
+  z-index: 10;
+
+  /* start hidden */
+  opacity: 0;
+  transform: translateY(-5rem);
+  pointer-events: none;
+  visibility: hidden;
+
+  /* animate both properties, and delay visibility when hiding */
+  transition:
+    transform 0.5s ease,
+    opacity   0.5s ease,
+    visibility 0s linear 0.5s;
+}
+
+
+#navMenu a:hover {
+  color: #f39c12;
 }
 
  .menu-button {
@@ -381,6 +396,7 @@ input[type="submit"] {
   background: none;
   border: none;
   padding: 0;
+  z-index: 1;
 }
 
 .menu-button span {
@@ -390,6 +406,7 @@ input[type="submit"] {
   position: absolute;
   left: 0;
   transition: all 0.3s ease-in-out;
+  z-index: 1;
 }
 .menu-button span:nth-child(1) { top: 0; }
 .menu-button span:nth-child(2) { top: 9px; }
@@ -409,6 +426,18 @@ input[type="submit"] {
 }
 
 #navMenu.show {
-  display: flex;
+  /* immediate visibility + pointer events */
+  visibility: visible;
+  pointer-events: auto;
+
+  /* end‐state of both transitions */
+  transform: translateY(0);
+  opacity: 1;
+
+  /* clear the visibility‐delay on show */
+  transition:
+    transform 0.7s ease,
+    opacity   0.5s ease,
+    visibility 0.2s;
 }
 

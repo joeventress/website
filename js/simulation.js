@@ -34,6 +34,14 @@ function createRoadTile(x, z, width, depth, color = 0x333333) {
   scene.add(tile);
   roadTiles.push({ x, z, w: width, d: depth });
 }
+// Ground plane (black square under the whole city)
+const groundSize = 1000; // Adjust size as needed
+const groundGeometry = new THREE.PlaneGeometry(groundSize, groundSize);
+const groundMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide });
+const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+ground.rotation.x = -Math.PI / 2; // Rotate to lie flat
+ground.position.y = -0.01;        // Just below 0 to avoid z-fighting
+scene.add(ground);
 
 // Building creation
 function createBuilding(x, z, width, depth, height = 1, color = 0x555555) {
@@ -220,7 +228,7 @@ const directions = new Array(count).fill().map(() => {
 const pedestrianGeometry = new THREE.BufferGeometry();
 pedestrianGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 const pedestrianMaterial = new THREE.PointsMaterial({
-  size: 0.3,
+  size: 2.5,
   color: 0xffffff,
   depthTest: true,
   depthWrite: false,
