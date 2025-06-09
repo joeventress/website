@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Crowd Simulation</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('header.html')
+        .then(response => response.text())
+        .then(html => {
+          // 1) Inject the header markup
+          document.getElementById('header-placeholder').innerHTML = html;
+
+          // 2) Wire up the menu button
+          const toggleButton = document.getElementById('menuToggle');
+          const navMenu      = document.getElementById('navMenu');
+          if (toggleButton && navMenu) {
+            toggleButton.addEventListener('click', () => {
+              toggleButton.classList.toggle('open');
+              navMenu.classList.toggle('show');
+            });
+          }
+        })
+        .catch(err => console.error('Error loading header:', err));
+    });
+  </script>
+
+
+  <section id="simulation-container">
+    <!-- Left-side text content -->
+    <div class="sim-text">
+      <h2>Background</h2>
+      <p>
+        I have experience using motion capture systems. blah blah blah 
+      </p>
+      <p>
+        Currently, I use a Vicon system. I'm keen on learning how to use other systems, particularly, trying out an active system would be fun.
+      </p>
+    </div>
+
+    <!-- Right-side simulation canvas -->
+    <div id="sim-wrapper">
+      <canvas id="simCanvas"></canvas>
+    </div>
+
+    <div class="sim-instructions">
+      Use your mouse to play with the scene above:
+      Left click: <span class="highlight">rotate</span>,
+      Right click: <span class="highlight">pan</span>,
+      Scroll wheel: <span class="highlight">zoom</span>.
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Joe Ventress</p>
+  </footer>
+
+  <!-- Scripts -->
+
+
+</body>
+</html>
