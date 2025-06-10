@@ -13,6 +13,7 @@ camera.lookAt(0, 0, 0);
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({ canvas });
+renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 // Simple OrbitControls replacement
@@ -39,6 +40,9 @@ class SimpleControls {
     this.domElement.addEventListener('mouseup', this.onMouseUp.bind(this));
     this.domElement.addEventListener('wheel', this.onWheel.bind(this));
     this.domElement.addEventListener('contextmenu', this.onContextMenu.bind(this)); // suppress right-click menu
+    this.domElement.addEventListener('touchstart', this.onTouchStart.bind(this), { passive: false });
+    this.domElement.addEventListener('touchmove', this.onTouchMove.bind(this), { passive: false });
+    this.domElement.addEventListener('touchend', this.onTouchEnd.bind(this));
   }
 
   onMouseDown(event) {
@@ -128,6 +132,80 @@ class SimpleControls {
   update() {
     // Called each frame if needed
   }
+  onTouchStart(event) {
+  if (event.touches.length === 1) {
+    this.isMouseDown = true;
+    this.mouseX = event.touches[0].clientX;
+    this.mouseY = event.touches[0].clientY;
+    this.isPanning = false; // One finger = rotate
+  } else if (event.touches.length === 2) {
+    this.isMouseDown = true;
+    this.isPanning = true; // Two fingers = pan
+    this.mouseX = (event.touches[0].clientX + event.touches[1].clientX) / 2;
+    this.mouseY = (event.touches[0].clientY + event.touches[1].clientY) / 2;
+  }
+}
+
+onTouchMove(event) {
+  if (!this.isMouseDown) return;
+  event.preventDefault(); // Prevent scrolling
+
+  let clientX, clientY;
+  if (event.touches.length === 1 || event.touches.length === 2) {
+    clientX = event.touches.length === 1
+      ? event.touches[0].clientX
+      : (event.touches[0].clientX + event.touches[1].clientX) / 2;
+
+    clientY = event.touches.length === 1
+      ? event.touches[0].clientY
+      : (event.touches[0].clientY + event.touches[1].clientY) / 2;
+  }
+
+  const deltaX = clientX - this.mouseX;
+  const deltaY = clientY - this.mouseY;
+
+  if (this.isPanning && this.enablePan) {
+    const panSpeed = 5;
+    const panOffset = new THREE.Vector3();
+
+    const right = new THREE.Vector3();
+    const up = new THREE.Vector3(0, 1, 0);
+    this.camera.getWorldDirection(right);
+    right.cross(up).normalize();
+
+    const actualUp = new THREE.Vector3();
+    actualUp.crossVectors(right, this.camera.getWorldDirection(new THREE.Vector3())).normalize();
+
+    right.multiplyScalar(-deltaX * panSpeed * 0.01);
+    actualUp.multiplyScalar(deltaY * panSpeed * 0.01);
+
+    panOffset.add(right).add(actualUp);
+    this.camera.position.add(panOffset);
+    this.target.add(panOffset);
+    this.camera.lookAt(this.target);
+  } else if (!this.isPanning && this.enableRotate) {
+    const spherical = new THREE.Spherical();
+    const offset = new THREE.Vector3();
+    offset.copy(this.camera.position).sub(this.target);
+    spherical.setFromVector3(offset);
+
+    spherical.theta -= deltaX * this.rotateSpeed;
+    spherical.phi += deltaY * this.rotateSpeed;
+    spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi));
+
+    offset.setFromSpherical(spherical);
+    this.camera.position.copy(this.target).add(offset);
+    this.camera.lookAt(this.target);
+  }
+
+  this.mouseX = clientX;
+  this.mouseY = clientY;
+}
+
+onTouchEnd(event) {
+  this.isMouseDown = false;
+  this.isPanning = false;
+}
 }
 
 
