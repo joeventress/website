@@ -27,6 +27,7 @@ class SimpleControls {
     this.enableZoom = true;
     this.minZoom = 3;
     this.maxZoom = 20;
+    this.lastTouchDistance = null;
 
     this.isMouseDown = false;
     this.isPanning = false;
@@ -200,6 +201,36 @@ onTouchMove(event) {
 
   this.mouseX = clientX;
   this.mouseY = clientY;
+
+    // Pinch zoom (only if two fingers)
+  if (event.touches.length === 2 && this.enableZoom) {
+    const dx = event.touches[0].clientX - event.touches[1].clientX;
+    const dy = event.touches[0].clientY - event.touches[1].clientY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (this.lastTouchDistance !== null) {
+      const delta = this.lastTouchDistance - distance;
+      const scale = delta > 0 ? 1.1 : 0.9;
+
+      const newLeft = this.camera.left * scale;
+      const newRight = this.camera.right * scale;
+      const newTop = this.camera.top * scale;
+      const newBottom = this.camera.bottom * scale;
+
+      const currentZoom = 200 / Math.abs(newRight - newLeft) * 2;
+      if (currentZoom >= this.minZoom && currentZoom <= this.maxZoom) {
+        this.camera.left = newLeft;
+        this.camera.right = newRight;
+        this.camera.top = newTop;
+        this.camera.bottom = newBottom;
+        this.camera.updateProjectionMatrix();
+      }
+    }
+
+    this.lastTouchDistance = distance;
+  } else {
+    this.lastTouchDistance = null;
+  }
 }
 
 onTouchEnd(event) {
