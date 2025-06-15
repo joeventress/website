@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PGR Conference 2025 - Joe Ventress</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('../../header.html')
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('header-placeholder').innerHTML = html;
+          const toggleButton = document.getElementById('menuToggle');
+          const navMenu = document.getElementById('navMenu');
+          if (toggleButton && navMenu) {
+            toggleButton.addEventListener('click', () => {
+              toggleButton.classList.toggle('open');
+              navMenu.classList.toggle('show');
+            });
+          }
+        })
+        .catch(err => console.error('Error loading header:', err));
+    });
+  </script>
+
+  <article class="post-content">
+    <header class="post-header">
+      <h1>PGR Conference 2025</h1>
+      <div class="post-meta">
+        <time datetime="2025-06-12">June 11, 2025</time>
+        <span class="post-category">Conference</span>
+      </div>
+    </header>
+
+    <div class="post-image">
+      <div style = "text-align: center;">
+      <img src="Cover.JPG" alt="PGR Conference 2025" style = "width: 60%; height: auto;">
+      <figcaption>Presenting research at this year's PGR Conference</figcaption>
+    </div>
+
+    <div class="post-body">
+      <h2>The PGR Conference, 2025</h2>
+      <p>
+        The PGR Conference is an annual event where postgraduate researchers present their work at my university. Organised by PGRs, for PGRS, the conference is a great opportunity for PhD students to practice showcasing their research to a wider academic audience. This was my first year attending and I presented some preliminary findings from the first study from my PhD, which was a qualitative analysis of pedestrian 'yielding' behaviours.
+      <p>
+          Despite the conference being in front of my department, I was still nervous to present. This surprised me more than anything, as normally I would only get nervous when there are unknowns, such as when I presented at EHBEA to a room full of strangers. I think I managed my nerves fairly well, although part of me wishes I had practiced my presentation a little more and knew the theoretical implications of my findings a little better. I do wonder if this is just a case of imposter syndrome, as I am still new to the field, so I must keep checking myself on that.
+      <p>
+        But enough about me, the PGR conference was a great opportunity to see what the other PGRs in my department were working on. From Visual impairments to horror stories about AI infiltration, it was nice to see the variety of research being conducted. I was particularly happy to see my peers talk in detail about their work, which is something that people don't tend to do in the pub.
+
+        Overall the PGR Conference was a great day, and I look forward to attending next year, where hopefully, I will have more interesting results to present. Lets hope that by then, I can present with a little more confidence.
+
+      </p>
+
+
+    <h2>My takeaways</h2>
+    <ul style="margin-left: 2rem;">
+      <li>Practice makes perfect</li></li>
+      <li>Always check your illustration materials</li>
+    </ul>
+
+
+      <div class="post-media">
+        <div style="text-align: center;">
+          <img src="WhiteboardPen.JPG" alt="Research Graph" style="width: 30%; height: auto;">
+          <figcaption>Pro tip: Bring a working whiteboard pen</figcaption>
+        </div>
+      </div>
+
+    <footer class="post-footer">
+      <div class="tags">
+        <span class="tag">Crowd Simulation</span>
+        <span class="tag">Research</span>
+        <span class="tag">Conference</span>
+      </div>
+      
+      <div class="share-buttons">
+        <a href="#" class="share-button">Share on Twitter</a>
+       <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://joeventress.github.io/website/postindex/PGRConference.html" target="_blank" class="share-button">Share on LinkedIn</a>
+      </div>
+    </footer>
+  </article>
+
+  <nav class="post-navigation">
+    <div class="prev-post">
+      <a href="../PGRConference/PGRConference.html">← Previous Post</a>
+    </div>
+    <div class="next-post">
+      <a href="next-post.html">Next Post →</a>
+    </div>
+  </nav>
+
+  <footer>
+    <p>© 2025 Joe Ventress</p>
+  </footer>
+</body>
+</html>

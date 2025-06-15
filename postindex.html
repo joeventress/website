@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog Posts - Joe Ventress</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <style></style>
+  </head>
+  <body>
+    <div id="header-placeholder"></div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        fetch("header.html")
+          .then((response) => response.text())
+          .then((html) => {
+            document.getElementById("header-placeholder").innerHTML = html;
+            const toggleButton = document.getElementById("menuToggle");
+            const navMenu = document.getElementById("navMenu");
+            if (toggleButton && navMenu) {
+              toggleButton.addEventListener("click", () => {
+                toggleButton.classList.toggle("open");
+                navMenu.classList.toggle("show");
+              });
+            }
+          })
+          .catch((err) => console.error("Error loading header:", err));
+      });
+    </script>
+
+    <div class="posts-container">
+      <div class="posts-header">
+        <h1>Blog Posts</h1>
+        <p class="posts-subtitle">
+          Thoughts, research, and experiences from my academic journey
+        </p>
+      </div>
+
+      <div class="posts-stats">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-number" id="total-posts">4</div>
+            <div class="stat-label">Total Posts</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">2025</div>
+            <div class="stat-label">Latest Year</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">2</div>
+            <div class="stat-label">Categories</div>
+          </div>
+        </div>
+      </div>
+
+      <button id="all-posts-btn" class="">Back to all posts</button>
+
+      <!-- Add after the posts-stats div -->
+      <div class="sort-controls">
+        <div class="sort-option">
+          <label for="sortBy">Sort by:</label>
+          <select id="sortBy" class="sort-select">
+            <option value="date-desc">Date (Newest First)</option>
+            <option value="date-asc">Date (Oldest First)</option>
+          </select>
+        </div>
+        <div class="sort-option">
+          <label for="filterCategory">Category:</label>
+          <select id="filterCategory" class="sort-select">
+            <option value="all">All Categories</option>
+            <option value="Conference">Conference</option>
+            <option value="Research">Research</option>
+          </select>
+        </div>
+      </div>
+
+      <section class="recent-posts">
+        <h2 class="section-title">Recent Posts</h2>
+        <div class="posts-grid" id="recent-posts-grid">
+          <div class="post-card">
+            <img
+              src="/Gifs/Nervous The Big Bang Theory GIF.gif"
+              alt="EHBEA Conference thumbnail"
+              style="object-position: center 10%"
+            />
+            <div class="post-content">
+              <div class="post-meta">
+                <span class="post-date">📅 April 2025</span>
+                <span class="post-category">Research</span>
+              </div>
+              <h2>My First Conference Presentation</h2>
+              <p>
+                I spoke to a room that had way more people in than I bargained
+                for. Here's how it went and what I learned from the
+                experience...
+              </p>
+              <a href="posts/EHBEA2025.html" class="read-more">Read More</a>
+            </div>
+          </div>
+
+          <div class="post-card">
+            <img
+              src="/Gifs/Am I Right GIF by VaynerSpeakers.gif"
+              alt="PGR Conference"
+              style="object-position: center 50%"
+            />
+            <div class="post-content">
+              <div class="post-meta">
+                <span class="post-date">📅 June 2025,</span>
+                <span class="post-category">Conference</span>
+              </div>
+              <h2>The PGR Conference 2025</h2>
+              <p>
+                Fun times supporting my peers' research. A great opportunity to
+                see what other postgraduate researchers are working on...
+              </p>
+              <a href="posts/PGRConference/PGRConference.html" class="read-more"
+                >Read More</a
+              >
+            </div>
+          </div>
+          <!--
+        <div class="post-card">
+          <img src="" alt="Belfast" style="object-position: center 35%">
+          <div class="post-content">
+            <div class="post-meta">
+              <span class="post-date">📅 June 2025,</span>
+              <span class="post-category">Research</span>
+            </div>
+            <h2>NINE Belfast Summer School</h2>
+            <p>Visited Belfast for a cross disciplinary summer school</p>
+            <a href="posts/conference-presentation.html" class="read-more">Read More</a>
+          </div>
+        </div>
+      -->
+          <!--
+        <div class="post-card">
+          <img src="" alt="Reflection" style="object-position: center 35%">
+          <div class="post-content">
+            <div class="post-meta">
+              <span class="post-date">📅 June 2025,</span>
+              <span class="post-category">Personal</span>
+            </div>
+            <h2>The PGR Conference 2025</h2>
+            <p>Fun times supporting my peers' research. A great opportunity to see what other postgraduate researchers are working on...</p>
+            <a href="posts/conference-presentation.html" class="read-more">Read More</a>
+          </div>
+        </div>
+-->
+        </div>
+      </section>
+
+      <section
+        class="older-posts"
+        id="older-posts-section"
+        style="display: none"
+      >
+        <h2 class="section-title">Older Posts</h2>
+        <div class="older-posts-content" id="older-posts-content">
+          <div class="posts-grid" id="older-posts-grid">
+            <!-- Older posts will be dynamically added here -->
+          </div>
+        </div>
+      </section>
+
+      <button class="show-more-btn" id="show-more-btn" style="display: none">
+        <span id="btn-text">Show Older Posts</span>
+      </button>
+    </div>
+
+    <footer>
+      <p>© 2025 Joe Ventress</p>
+    </footer>
+
+    <script>
+      // Post management system
+      class PostManager {
+        constructor() {
+          this.allPosts = [];
+          this.recentPostsLimit = 5;
+          this.showMoreBtn = document.getElementById("show-more-btn");
+          this.olderPostsSection = document.getElementById(
+            "older-posts-section"
+          );
+          this.olderPostsContent = document.getElementById(
+            "older-posts-content"
+          );
+          this.btnText = document.getElementById("btn-text");
+          this.isOlderPostsVisible = false;
+          this.sortBy = "date-desc";
+          this.categoryFilter = "all";
+          this.originalPosts = Array.from(
+            document.querySelectorAll(".post-card")
+          );
+          this.allPostsBtn = document.getElementById("all-posts-btn");
+
+          this.init();
+        }
+
+        init() {
+          this.setupEventListeners();
+          this.renderPosts(); // Initial render
+          this.updatePostCounts();
+          this.checkForOlderPosts();
+        }
+
+        setupEventListeners() {
+          this.showMoreBtn.addEventListener("click", () => {
+            this.toggleOlderPosts();
+          });
+
+          // Add sort and filter listeners
+          document.getElementById("sortBy").addEventListener("change", (e) => {
+            this.sortBy = e.target.value;
+            this.renderPosts();
+          });
+
+          document
+            .getElementById("filterCategory")
+            .addEventListener("change", (e) => {
+              this.categoryFilter = e.target.value;
+              this.renderPosts();
+            });
+
+          if (this.allPostsBtn) {
+            this.allPostsBtn.addEventListener("click", () => {
+              this.categoryFilter = "all";
+              this.sortBy = "date-desc";
+              document.getElementById("sortBy").value = "date-desc";
+              document.getElementById("filterCategory").value = "all";
+              this.renderPosts();
+            });
+          }
+        }
+
+        updateCategoryFilter() {
+          const filterSelect = document.getElementById("filterCategory");
+          const categories = new Set(["all"]); // Always include 'all' option
+
+          // Get all unique categories from posts
+          this.originalPosts.forEach((post) => {
+            const category = post.querySelector(".post-category").textContent;
+            categories.add(category);
+          });
+
+          // Clear and rebuild category options
+          filterSelect.innerHTML = "";
+          categories.forEach((category) => {
+            const option = document.createElement("option");
+            option.value = category;
+            option.textContent =
+              category === "all" ? "All Categories" : category;
+            filterSelect.appendChild(option);
+          });
+
+          // Update category count in stats
+          const categoryCount = document.querySelector(
+            ".stat-number:nth-child(3)"
+          );
+          if (categoryCount) {
+            categoryCount.textContent = categories.size - 1; // Subtract 1 to exclude 'all'
+          }
+        }
+
+        renderPosts() {
+          const recentGrid = document.getElementById("recent-posts-grid");
+          const olderGrid = document.getElementById("older-posts-grid");
+
+          // Start with a copy of original posts
+          let posts = Array.from(this.originalPosts).map((post) =>
+            post.cloneNode(true)
+          );
+
+          // Filter by category if not "all"
+          if (this.categoryFilter !== "all") {
+            posts = posts.filter((post) => {
+              const category = post
+                .querySelector(".post-category")
+                .textContent.trim();
+              return category === this.categoryFilter;
+            });
+          }
+
+          // Sort posts
+          posts.sort((a, b) => {
+            const dateA = new Date(
+              a
+                .querySelector(".post-date")
+                .textContent.replace("📅 ", "")
+                .replace(",", "")
+            );
+            const dateB = new Date(
+              b
+                .querySelector(".post-date")
+                .textContent.replace("📅 ", "")
+                .replace(",", "")
+            );
+            return this.sortBy === "date-desc" ? dateB - dateA : dateA - dateB;
+          });
+
+          // Clear existing posts
+          recentGrid.innerHTML = "";
+          olderGrid.innerHTML = "";
+
+          // Redistribute posts
+          posts.forEach((post, index) => {
+            if (index < this.recentPostsLimit) {
+              recentGrid.appendChild(post);
+            } else {
+              olderGrid.appendChild(post);
+            }
+          });
+
+          // Update category filter options and check for older posts
+          this.updateCategoryFilter();
+          this.checkForOlderPosts();
+
+          // Update total posts count in stats
+          const totalPostsElement = document.getElementById("total-posts");
+          if (totalPostsElement) {
+            totalPostsElement.textContent = posts.length;
+          }
+
+          this.updatePostCounts();
+        }
+
+        addNewPost(title, description, image, link, date, category) {
+          const postCard = document.createElement("div");
+          postCard.className = "post-card";
+
+          postCard.innerHTML = `
+      <img src="${image}" alt="${title} thumbnail">
+      <div class="post-content">
+        <div class="post-meta">
+          <span class="post-date">📅 ${date}</span>
+          <span class="post-category">${category}</span>
+        </div>
+        <h2>${title}</h2>
+        <p>${description}</p>
+        <a href="${link}" class="read-more">Read More</a>
+      </div>
+    `;
+
+          // Add to original posts array
+          this.originalPosts.unshift(postCard);
+
+          // Re-render all posts
+          this.renderPosts();
+        }
+
+        checkForOlderPosts() {
+          // ...existing code...
+        }
+
+        toggleOlderPosts() {
+          // ...existing code...
+        }
+
+        updatePostCounts() {
+          // ...existing code...
+        }
+      }
+
+      // Initialize the post manager
+      const postManager = new PostManager();
+
+      // Example of how to add new posts:
+      // postManager.addNewPost(
+      //   'New Post Title',
+      //   'Post description...',
+      //   'path/to/image.jpg',
+      //   'path/to/post.html',
+      //   'February 2025',
+      //   'Research'
+      // );
+    </script>
+  </body>
+</html>

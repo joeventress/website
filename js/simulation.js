@@ -25,8 +25,8 @@ class SimpleControls {
     this.enableRotate = true;
     this.enablePan = true;
     this.enableZoom = true;
-    this.minZoom = 3;
-    this.maxZoom = 20;
+    this.minZoom = 0.001;
+    this.maxZoom = 30;
     this.lastTouchDistance = null;
 
     this.isMouseDown = false;
@@ -35,6 +35,9 @@ class SimpleControls {
     this.mouseY = 0;
     this.rotateSpeed = 0.005;
     this.zoomSpeed = 0.001;
+
+    // Store the camera's initial frustum width
+    this.initialWidth = Math.abs(this.camera.right - this.camera.left);
 
     this.domElement.addEventListener('mousedown', this.onMouseDown.bind(this));
     this.domElement.addEventListener('mousemove', this.onMouseMove.bind(this));
@@ -112,23 +115,37 @@ class SimpleControls {
   }
 
   onWheel(event) {
-    if (!this.enableZoom) return;
+      if (!this.enableZoom) return;
+      event.preventDefault();
 
-    const scale = event.deltaY > 0 ? 1.1 : 0.9;
-    const newLeft = this.camera.left * scale;
-    const newRight = this.camera.right * scale;
-    const newTop = this.camera.top * scale;
-    const newBottom = this.camera.bottom * scale;
-
-    const currentZoom = 200 / Math.abs(newRight - newLeft) * 2;
-    if (currentZoom >= this.minZoom && currentZoom <= this.maxZoom) {
-      this.camera.left = newLeft;
-      this.camera.right = newRight;
-      this.camera.top = newTop;
-      this.camera.bottom = newBottom;
-      this.camera.updateProjectionMatrix();
+      const zoomFactor = event.deltaY > 0 ? 1.1 : 0.9;
+      
+      // Get current view size
+      const currentWidth = Math.abs(this.camera.right - this.camera.left);
+      const currentHeight = Math.abs(this.camera.top - this.camera.bottom);
+      
+      // Calculate new dimensions based on zoomFactor
+      const newWidth = currentWidth * zoomFactor;
+      const newHeight = currentHeight * zoomFactor;
+      
+      // Use the stored initial width as baseSize
+      const baseSize = this.initialWidth;
+      const currentZoom = baseSize / currentWidth;
+      const newZoom = baseSize / newWidth;
+      
+      // Check zoom limits
+      if (newZoom >= this.minZoom && newZoom <= this.maxZoom) {
+        const centerX = (this.camera.left + this.camera.right) / 2;
+        const centerY = (this.camera.top + this.camera.bottom) / 2;
+        
+        // Update camera frustum while keeping the center point
+        this.camera.left = centerX - newWidth / 2;
+        this.camera.right = centerX + newWidth / 2;
+        this.camera.top = centerY + newHeight / 2;
+        this.camera.bottom = centerY - newHeight / 2;
+        this.camera.updateProjectionMatrix();
+      }
     }
-  }
 
   update() {
     // Called each frame if needed
@@ -585,44 +602,158 @@ function updateUI() {
   }
 }
 
+// Replace the createControlPanel function with this updated version:
 function createControlPanel() {
+  // Create toggle button
+  const toggleButton = document.createElement('button');
+  toggleButton.id = 'toggle-controls';
+  toggleButton.innerHTML = 'Model Controller (click me!)';
+  toggleButton.style.cssText = `
+    position: absolute;
+    top: 75vh;
+    right: 20vw;
+    z-index: 1000;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border: 1px solid #444;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  `;
+  document.body.appendChild(toggleButton);
+
+  // Create panel (initially hidden)
   const panel = document.createElement('div');
   panel.id = 'control-panel';
   panel.style.cssText = `
-    position: absolute;
-    top: 50vh;
-    left: auto; /* Add this */
-    right: 55vw;
+    position: fixed;
+    top: 80vh;
+    right: 10vw;
     background: rgba(0, 0, 0, 0.85);
     color: white;
-    padding: 1vw 2vw;
-    border-radius: 2vw;
-    border: 0.2vw solid #333;
-    z-index: 100;
+    padding: 1%;
+    border-radius: 10px;
+    border: 1px solid #444;
+    z-index: 999;
     font-family: Arial, sans-serif;
-    font-size: 0.7em;
-    max-width: 90vw;
-    min-width: 180px;
-    box-sizing: border-box;
-    box-shadow: 0 0.5vw 2vw rgba(0,0,0,0.4);
-    resize: both;
-    overflow: auto;
-    cursor: move;
+    height: 400px;
+    width: 300px;
+    display: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   `;
 
-  if (isSmallScreen) {
-    panel.style.top = '740px';       // Fixed pixel offset to avoid text
-    panel.style.left = '5vw';
-    panel.style.right = 'auto';
-    panel.style.width = '650px';
-    panel.style.height = '200px';
-  } else {
-    panel.style.bottom = '50px';     // Use bottom instead of top on desktop
-    panel.style.right = '50px';
-    panel.style.top = '50px';
-    panel.style.left = 'auto';
-    panel.style.height = '400px';
-  }
+  panel.innerHTML = `
+    <h3 style="margin-top: 0; color: white; font-size: 16px;">Simulation Controls</h3>
+    
+    <div class="control-group">
+      <label>Population: <span id="populationValue">${pedestrianCount}</span></label>
+      <input type="range" id="populationSlider" min="50" max="5000" value="${pedestrianCount}" step="50">
+    </div>
+    
+    <div class="control-group">
+      <label>Speed: <span id="speedValue">${simulationSpeed.toFixed(1)}x</span></label>
+      <input type="range" id="speedSlider" min="0.1" max="3.0" value="${simulationSpeed}" step="0.1">
+    </div>
+    
+    <div class="button-group">
+      <button id="resetButton">Reset Simulation</button>
+      <button id="newCityButton">New City</button>
+    </div>
+    
+    <div id="stats">
+      <div>FPS: ${fps}</div>
+      <div>Road Tiles: ${roadTiles.length}</div>
+    </div>
+  `;
+
+  document.body.appendChild(panel);
+
+  // Toggle panel visibility
+  toggleButton.addEventListener('click', () => {
+    const isVisible = panel.style.display === 'block';
+    panel.style.display = isVisible ? 'none' : 'block';
+  });
+
+  // Update values in real-time
+  document.getElementById('populationSlider').addEventListener('input', (e) => {
+    const value = parseInt(e.target.value);
+    document.getElementById('populationValue').textContent = value;
+    pedestrianCount = value;
+    initializePedestrians();
+  });
+
+  document.getElementById('speedSlider').addEventListener('input', (e) => {
+    const value = parseFloat(e.target.value);
+    document.getElementById('speedValue').textContent = value.toFixed(1) + 'x';
+    simulationSpeed = value;
+  });
+
+  document.getElementById('resetButton').addEventListener('click', initializePedestrians);
+  document.getElementById('newCityButton').addEventListener('click', () => {
+    roadTiles.length = 0;
+    buildingObstacles.length = 0;
+    scene.children.forEach(child => {
+      if (child !== ground) scene.remove(child);
+    });
+    createCityLayout();
+    initializePedestrians();
+  });
+
+  // Add CSS for better styling
+  const style = document.createElement('style');
+  style.textContent = `
+    .control-group {
+      margin-bottom: 15px;
+    }
+    .control-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .control-group input[type="range"] {
+      width: 100%;
+    }
+    .button-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 15px 0;
+    }
+    .button-group button {
+      padding: 8px;
+      background: #333;
+      color: white;
+      border: 1px solid #444;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .button-group button:hover {
+      background: #444;
+    }
+    #stats {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #444;
+      font-size: 14px;
+    }
+  `;
+  document.head.appendChild(style);
+
+if (isSmallScreen()) {
+  // For small screens
+  panel.style.top = '60%';
+  panel.style.left = '5%';
+  panel.style.right = 'auto';
+  panel.style.width = '80%';
+  panel.style.height = '20%';
+} else {
+  // For larger screens (changed size and position)
+  panel.style.top = '80px';      // Adjust as desired
+  panel.style.right = '50px';    // Adjust as desired
+  panel.style.left = 'auto';
+  panel.style.width = '500px';   // Larger width for big screens
+  panel.style.height = '675px';  // Larger height for big screens
+}
 
   panel.style.resize = 'both';
   panel.style.overflow = 'auto';
@@ -766,7 +897,7 @@ function createControlPanel() {
     isDragging = false;
     document.body.style.userSelect = ''; // Re-enable text selection
   });
-}  
+}
 
 // Window resize handler
 window.addEventListener('resize', () => {
@@ -776,6 +907,35 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+function handleResize() {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const aspect = width / height;
+
+  // Update camera
+  const currentSize = camera.right - camera.left;
+  const newHalfWidth = (currentSize / 2) * aspect;
+  
+  camera.left = -newHalfWidth;
+  camera.right = newHalfWidth;
+  camera.top = currentSize / 2;
+  camera.bottom = -currentSize / 2;
+  camera.updateProjectionMatrix();
+
+  // Update renderer
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(window.devicePixelRatio);
+}
+
+// Replace the existing resize listener with this:
+window.addEventListener('resize', handleResize);
+
+// Add fullscreen handling
+document.addEventListener('fullscreenchange', handleResize);
+document.addEventListener('webkitfullscreenchange', handleResize);
+document.addEventListener('mozfullscreenchange', handleResize);
+document.addEventListener('MSFullscreenChange', handleResize);
 
 // Initialize everything
 createCityLayout();

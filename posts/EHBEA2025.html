@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EHBEA 2025 Conference - Joe Ventress</title>
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <div id="header-placeholder"></div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        fetch("../header.html")
+          .then((response) => response.text())
+          .then((html) => {
+            document.getElementById("header-placeholder").innerHTML = html;
+            const toggleButton = document.getElementById("menuToggle");
+            const navMenu = document.getElementById("navMenu");
+            if (toggleButton && navMenu) {
+              toggleButton.addEventListener("click", () => {
+                toggleButton.classList.toggle("open");
+                navMenu.classList.toggle("show");
+              });
+            }
+          })
+          .catch((err) => console.error("Error loading header:", err));
+      });
+    </script>
+
+    <article class="post-content">
+      <header class="post-header">
+        <h1>EHBEA 2025 Conference Presentation</h1>
+        <div class="post-meta">
+          <time datetime="2025-06-12">June 12, 2025</time>
+          <span class="post-category">Conference</span>
+        </div>
+      </header>
+
+      <div class="post-image">
+        <img
+          src="/posts/EHBEAThumb.jpg"
+          alt="EHBEA 2025 Conference Presentation"
+        />
+        <figcaption>Presenting research at EHBEA 2025</figcaption>
+      </div>
+
+      <div class="post-body">
+        <h2>Introduction</h2>
+        <p>[Your introduction text here]</p>
+
+        <h2>Key Points</h2>
+        <ul>
+          <li>Point 1</li>
+          <li>Point 2</li>
+          <li>Point 3</li>
+        </ul>
+
+        <h2>Research Highlights</h2>
+        <p>[Research details here]</p>
+
+        <div class="post-media">
+          <img
+            src="/posts/EHBEAgraph.png"
+            alt="Research Graph"
+            ,
+            style="align-items: center"
+          />
+          <figcaption>Figure 1: Research findings visualization</figcaption>
+        </div>
+
+        <h2>Conclusion</h2>
+        <p>[Your conclusion text here]</p>
+      </div>
+
+      <footer class="post-footer">
+        <div class="tags">
+          <span class="tag">Crowd Simulation</span>
+          <span class="tag">Research</span>
+          <span class="tag">Conference</span>
+        </div>
+
+        <div class="share-buttons">
+          <a href="#" class="share-button">Share on Twitter</a>
+          <a href="#" class="share-button">Share on LinkedIn</a>
+        </div>
+      </footer>
+    </article>
+
+    <nav class="post-navigation">
+      <div class="prev-post">
+        <a href="PGRConference/PGRConference.html">← Previous Post</a>
+      </div>
+      <div class="next-post">
+        <a href="next-post.html">Next Post →</a>
+      </div>
+    </nav>
+
+    <footer>
+      <p>© 2025 Joe Ventress</p>
+    </footer>
+  </body>
+</html>

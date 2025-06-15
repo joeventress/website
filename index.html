@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Joe Ventress</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-
-<body>
-  <div id="header-placeholder"></div>
+<div id="header-placeholder"></div>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       fetch('header.html')
@@ -28,33 +26,61 @@
             });
           }
         })
-        .catch(err => console.error('Error loading header:', err)); 
+        .catch(err => console.error('Error loading header:', err));
     });
   </script>
-
-  <!-- rest of page… -->
-</body>
-
   <section id="hero">
     <video autoplay muted loop playsinline id="bg-video">
       <source src="videos/Handover.mp4" type="video/mp4" />
       Your browser does not support the video tag.
     </video>
-    <div class="overlay">
+    <div class="overlay"></div>
+    
+    <div class="hero-content">
       <h1>Joe Ventress</h1>
-      <h2>PhD Student in Pedestrian Dynamics & Crowd Simulation</h2>
-      <a href="index.html">Home</a></li>
-      <a href="about.html">About</a></li>
-      <a href="cv.pdf"> CV </a></li>
-      <a href="Crowd-Simulation.html">Crowd Simulation</a></li>
-      <a href="mocap.html"> Motion Capture</a></li>
-      <a href="contact.html">Contact</a></li>
+      <h2>PhD Student in Psychology with Computer Science</h2>
+      
+      <div class="nav-grid">
+        <a href="about.html" class="nav-card primary-card">
+          <span class="card-icon"> <img src="icons/aboutme.png" width = 75 alt="About Me" /></span>
+          <div class="card-title">About</div>
+          <div class="card-desc">Learn more about my background and research interests</div>
+        </a>
+        <a href="cv.pdf" class="nav-card">
+          <span class="card-icon"> <img src="icons/cv.png" width = 75 alt="CV" /></span>
+          <div class="card-title">CV</div>
+          <div class="card-desc">Download my academic curriculum vitae</div>
+        </a>
+        
+        <a href="postindex.html" class="nav-card secondary-card">
+          <span class="card-icon"> <img src="icons/recent.png" width = 75 alt="Recently" /></span>
+          <div class="card-title">Recent Things!</div>
+          <div class="card-desc">Latest updates, projects, and discoveries</div>
+        </a>
+        
+        <a href="Crowd-Simulation.html" class="nav-card">
+          <span class="card-icon"> <img src="icons/pedestrian.png" width = 75 alt="Pedestrians" /></span>
+          <div class="card-title">Crowd Simulation</div>
+          <div class="card-desc">Explore my work in crowd behavior modeling</div>
+        </a>
+        
+        <a href="mocap.html" class="nav-card accent-card">
+          <span class="card-icon"> <img src="icons/mocap.png" width = 75 alt="Mocap" /></span>
+          <div class="card-title">Motion Capture</div>
+          <div class="card-desc">Motion capture research and applications</div>
+        </a>
+        
+        <a href="contact.html" class="nav-card">
+          <span class="card-icon"> <img src="icons/Contact.png" width = 75 alt="Contact" /></span>
+          <div class="card-title">Contact</div>
+          <div class="card-desc">Get in touch for collaborations or questions</div>
+        </a>
+      </div>
     </div>
   </section>
 
   <footer>
     <p>© 2025 Joe Ventress</p>
   </footer>
-
 </body>
 </html>
