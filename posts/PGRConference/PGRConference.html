@@ -1,32 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <base href="../../">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PGR Conference 2025 - Joe Ventress</title>
   <link rel="stylesheet" href="../../css/styles.css">
 </head>
 <body>
-  <div id="header-placeholder"></div>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      fetch('header.html')
-        .then(response => response.text())
-        .then(html => {
-          document.getElementById('header-placeholder').innerHTML = html;
-          const toggleButton = document.getElementById('menuToggle');
-          const navMenu = document.getElementById('navMenu');
-          if (toggleButton && navMenu) {
-            toggleButton.addEventListener('click', () => {
-              toggleButton.classList.toggle('open');
-              navMenu.classList.toggle('show');
-            });
-          }
-        })
-        .catch(err => console.error('Error loading header:', err));
-    });
-  </script>
+  <div style="padding: 1rem;">
+    <button onclick="history.back()" style="padding: 0.5rem 1rem; font-size: 1rem;">← Back</button>
+  </div>
 
   <article class="post-content">
     <header class="post-header">
