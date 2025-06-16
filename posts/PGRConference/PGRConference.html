@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <base href="../../">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PGR Conference 2025 - Joe Ventress</title>
@@ -10,7 +11,7 @@
   <div id="header-placeholder"></div>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      fetch('../../header.html')
+      fetch('header.html')
         .then(response => response.text())
         .then(html => {
           document.getElementById('header-placeholder').innerHTML = html;
@@ -38,7 +39,7 @@
 
     <div class="post-image">
       <div style = "text-align: center;">
-      <img src="Cover.JPG" alt="PGR Conference 2025" style = "width: 60%; height: auto;">
+      <img src="/posts/PGRConference/Cover.JPG" alt="PGR Conference 2025" style = "width: 60%; height: auto;">
       <figcaption>Presenting research at this year's PGR Conference</figcaption>
     </div>
 
@@ -65,7 +66,7 @@
 
       <div class="post-media">
         <div style="text-align: center;">
-          <img src="WhiteboardPen.JPG" alt="Research Graph" style="width: 30%; height: auto;">
+          <img src="/posts/PGRConference/WhiteboardPen.JPG" alt="Research Graph" style="width: 30%; height: auto;">
           <figcaption>Pro tip: Bring a working whiteboard pen</figcaption>
         </div>
       </div>
